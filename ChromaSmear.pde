@@ -10,7 +10,7 @@ ArrayList<File> files;
 static int imageWidth = 4056;
 static int imageHeight = 3040;
 
-static int numFramesSmear = 70;
+static int numFramesSmear = 55;
 
 ArrayList<float[]> hueBuffers;
 Vector2d[] hueAccumBuffer;
@@ -25,7 +25,7 @@ ArrayList<Double> brightnessBuffers;
 
 PImage currentImage;
 
-int currentIndex = 3000;
+int currentIndex = 0;
 int maxIndex = -1;
 int numFiles;
 
@@ -94,7 +94,7 @@ void draw() {
         int index = y * imageWidth + x;
         float sat = (float) (satAccumBuffer[index] / numFramesSmear);
         
-        Vector2d hueVec = hueAccumBuffer[index];
+        Vector2d hueVec = new Vector2d(hueAccumBuffer[index]);
         hueVec.div(numFramesSmear);
         
         float hue = hueVec.hue();
@@ -106,9 +106,10 @@ void draw() {
       } 
     }
     
+    
     currentImage.updatePixels();
     
-    image(currentImage, 0, 0, width, height);
+    image(currentImage, width/2, 0, width, height);
     
     
     println("Saved: " + path);
@@ -125,6 +126,8 @@ void draw() {
 void addFile(File f) {
   println(f.getAbsolutePath());
   currentImage = loadImage(f.getAbsolutePath());
+  image(currentImage, 0, 0, width, height);
+
   currentImage.loadPixels();
   
   if(hueBuffers.size() >= numFramesSmear) {
