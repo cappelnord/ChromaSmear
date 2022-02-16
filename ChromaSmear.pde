@@ -12,7 +12,7 @@ static int imageHeight = 3040;
 
 static int numFramesSmear = 70;
 
-ArrayList<Vector2d[]> hueBuffers;
+ArrayList<float[]> hueBuffers;
 Vector2d[] hueAccumBuffer;
 
 ArrayList<float[]> satBuffers;
@@ -37,7 +37,7 @@ void setup() {
   
   files = new ArrayList<File>();
   
-  hueBuffers = new ArrayList<Vector2d[]>();
+  hueBuffers = new ArrayList<float[]>();
   hueAccumBuffer = new Vector2d[bufferSize];
   
   for(int i = 0; i < bufferSize; i++) {
@@ -129,11 +129,11 @@ void addFile(File f) {
   
   if(hueBuffers.size() >= numFramesSmear) {
     
-    Vector2d[] remHueBuffer = hueBuffers.get(0);
+    float[] remHueBuffer = hueBuffers.get(0);
     float[] remSatBuffer = satBuffers.get(0);
     
     for(int i = 0; i < hueAccumBuffer.length; i++) {
-      hueAccumBuffer[i].sub(remHueBuffer[i]);
+      hueAccumBuffer[i].sub(new Vector2d(remHueBuffer[i]));
       satAccumBuffer[i] = satAccumBuffer[i] - remSatBuffer[i];
     }
     
@@ -144,7 +144,7 @@ void addFile(File f) {
     brightnessBuffers.remove(0);
   }
   
-  Vector2d[] hueBuffer = new Vector2d[bufferSize];
+  float[] hueBuffer = new float[bufferSize];
   float[] satBuffer = new float[bufferSize];
   
   lastAvgBrightness = 0.0;
@@ -159,13 +159,13 @@ void addFile(File f) {
   for(int y = 0; y < imageHeight; y++) {
     for(int x = 0; x < imageWidth; x++) {
       int index = y * imageWidth + x;
-      hueBuffer[index] = new Vector2d(hue(currentImage.pixels[index]));
+      hueBuffer[index] = hue(currentImage.pixels[index]);
       satBuffer[index] = saturation(currentImage.pixels[index]);
     }
   }
   
   for(int i = 0; i < bufferSize; i++) {
-    hueAccumBuffer[i].add(hueBuffer[i]);
+    hueAccumBuffer[i].add(new Vector2d(hueBuffer[i]));
     satAccumBuffer[i] = satAccumBuffer[i] + satBuffer[i];
   }
   
