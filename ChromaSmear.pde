@@ -10,7 +10,7 @@ ArrayList<File> files;
 static int imageWidth = 4056;
 static int imageHeight = 3040;
 
-static int numFramesSmear = 55;
+static int numFramesSmear = 70;
 
 ArrayList<float[]> hueBuffers;
 Vector2d[] hueAccumBuffer;
