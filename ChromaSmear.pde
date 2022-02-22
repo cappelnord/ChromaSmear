@@ -2,8 +2,8 @@ import java.util.Arrays;
 
 // Hue über Vektoren darstellen, Entfernung vom Zentrum dann mit Sättigung multiplizieren 
 
-static String inPath = "/Users/patri/Dropbox/T7Backup/timelapse29022022_short/";
-static String outPath = "out/";
+static String inPath = "/Volumes/Dairy/2021-09-21_source/";
+static String outPath = "/Volumes/Dairy/2021-09-21_chroma/";
 
 ArrayList<File> files;
 
@@ -53,7 +53,7 @@ void setup() {
   File[] filesList = file.listFiles();
   Arrays.sort(filesList);
   for(File f : filesList) {
-    if(f.getAbsolutePath().endsWith(".jpg")) {
+    if(f.getAbsolutePath().endsWith(".jpg") && !f.getAbsolutePath().contains("._")) {
       files.add(f);
     }
   }
@@ -67,7 +67,7 @@ void setup() {
 }
 
 String getOutPath(File f) {
-  return outPath + f.getName().replace(".jpg", ".jpg");
+  return outPath + f.getName().replace(".jpg", ".png");
 }
 
 void draw() {
@@ -83,6 +83,8 @@ void draw() {
   
   if(hueBuffers.size() < numFramesSmear) {
     println("Not enough buffers collected ...");
+    println("Saved old image: " + path);
+    currentImage.save(path);
   } else if(exists) {
      println("File already exists: " + path);
   } else {
